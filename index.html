@@ -261,9 +261,7 @@
 <tr><td>Over a year</td><td>25%</td></tr>
 </table>
 <p style="margin-top:12px;">A new thread starts earning citations after about a month. It earns the most per thread between three and six months, and keeps going for about a year.</p></div></div>
-<div class="field">
-<label class="q" for="post_comment_split">Posts versus comments: what split do you want?</label>
-<div class="known"><span class="tag">Our research &middot; react to this</span><p>Reddit earned 677 citations on your prompts in the week. We pulled the title, post and comments of the cited threads to see what earns a citation and what gets a brand named in the answer.</p>
+<div class="field"><div class="q">What gets a Reddit thread cited</div><div class="known"><span class="tag">Our research &middot; react to this</span><p>Reddit earned 677 citations on your prompts in the week. We pulled the title, post and comments of the cited threads to see what earns a citation.</p>
 <table class="data text">
 <tr><th>What we measured on the 147 cited threads</th><th>Result</th></tr>
 <tr><td>Engines that cite Reddit on your prompts</td><td>Google AI Mode 58%, AI Overviews 34%, Gemini 8%</td></tr>
@@ -272,18 +270,13 @@
 <tr><td>Brands named per thread</td><td>0.3 in the title, 2.1 in the post, 6.9 in the comments</td></tr>
 <tr><td>Upvotes</td><td>They make no difference. The typical cited thread has a score of 2.</td></tr>
 <tr><td>Threads that name Higgsfield</td><td>45 of 147, nearly always in the comments</td></tr>
-</table><p style="margin-top:14px;">The title decides whether a thread is cited. The comments decide which brands the answer names.</p>
-<table class="data text">
-<tr><th>Where a brand is named in the cited thread</th><th>How often Google's engines then name it on that prompt</th></tr>
-<tr><td>In the title</td><td>66%</td></tr>
-<tr><td>In the post</td><td>35%</td></tr>
-<tr><td>In three or more comments</td><td>36%</td></tr>
-<tr><td>In one or two comments</td><td>22%</td></tr>
-<tr><td>Not in the thread</td><td>9%</td></tr>
-</table></div>
-<div class="confirm">Give us a split between <strong>new posts</strong> and <strong>comments on existing threads</strong>, for example 30/70.</div>
-<div class="hint">New posts let us set the title to the prompt. Comments put Higgsfield into threads that are already cited, and three mentions in a thread do as much as a mention in the post.</div>
-<textarea id="post_comment_split" name="post_comment_split"></textarea>
+</table></div></div>
+<div class="field">
+<label class="q" for="channel_vs_citations">Reddit as a channel versus Reddit for citations</label>
+<div class="known"><span class="tag">Our recommendation &middot; react to this</span><p>We can do two kinds of work on Reddit.</p><table class="data text"><tr><th>Kind of work</th><th>What it is</th><th>We recommend</th></tr><tr><td>Reddit as a channel</td><td>Reddit-native content written for the subreddit itself, such as tool tests, workflows and comparisons</td><td>30</td></tr><tr><td>Purely for citations</td><td>Threads and comments built around your target prompts, so the engines pick them up</td><td>30</td></tr></table><p style="margin-top:12px;">Inside each 30, half would be posts and half would be comments.</p></div>
+<div class="confirm">Does <strong>30 and 30</strong> work for you, or would you weight it differently?</div>
+<div class="hint">If you can give us generations, prompts or test credits for the Reddit-native posts, say so here.</div>
+<textarea id="channel_vs_citations" name="channel_vs_citations"></textarea>
 </div></div></section>
 <section><div class="sec-head"><div class="sec-num">3</div><h2>Subreddits</h2></div><div class="sec-body"><div class="field">
 <label class="q" for="subreddits_engage">Where should we engage?</label>
@@ -300,11 +293,6 @@
 <label class="q" for="reddit_presence">Your Reddit presence today</label>
 <div class="hint">Official accounts, a subreddit you run, staff who post, ambassadors or other agencies posting for you. Also any bans, removals or moderator warnings, so we know what we are walking into.</div>
 <textarea id="reddit_presence" name="reddit_presence"></textarea>
-</div>
-<div class="field">
-<label class="q" for="reddit_native">Should we do Reddit-native content?</label>
-<div class="hint">Posts written for the subreddit itself, such as tool tests, workflows and comparisons, without sales language. If yes, tell us which formats you are comfortable with and whether you can give us generations, prompts or test credits to make them.</div>
-<textarea id="reddit_native" name="reddit_native"></textarea>
 </div></div></section>
 <section><div class="sec-head"><div class="sec-num">4</div><h2>Keyword volume behind your prompts</h2></div><div class="sec-body"><div class="field">
 <label class="q" for="keyword_priority">How many people ask AI assistants about each theme</label>
@@ -363,27 +351,13 @@
 </div>
 <div class="field">
 <label class="q" for="claims">What we can say</label>
-<div class="hint">The claims you are happy to see repeated in public, with the source for each. For example the number of models on one subscription, what the unlimited plan covers, and what happens to credits when a generation fails.</div>
+<div class="hint">The claims you are happy to see repeated in public, with the source for each. For example the number of models on one subscription.</div>
 <textarea id="claims" name="claims"></textarea>
 </div>
 <div class="field">
 <label class="q" for="competitors">Competitors</label>
 <div class="hint">Can we name Runway, Kling, HeyGen, Synthesia or Creatify in a comparison? Can we name one first, or only reply once someone else has? Any competitor that is off limits.</div>
 <textarea id="competitors" name="competitors"></textarea>
-</div>
-<div class="field">
-<label class="q" for="billing_threads">Pricing and billing threads</label>
-<div class="known"><span class="tag">Our research &middot; react to this</span>
-<p>How the engines talk about Higgsfield once it is named, on your 29 branded prompts:</p>
-<table class="data">
-<tr><th>Theme</th><th>Appears in</th><th>Positive</th></tr>
-<tr><td>Pricing and plans</td><td>44% of answers</td><td>12%</td></tr>
-<tr><td>Cinematic direction and camera control</td><td>24%</td><td>99%</td></tr>
-<tr><td>Marketing ads</td><td>9%</td><td>62%</td></tr>
-<tr><td>Enterprise controls</td><td>8%</td><td>29%</td></tr>
-</table></div>
-<div class="confirm">When a thread raises billing, refunds or the unlimited plan, should we <strong>reply, stay out, or point people to support</strong>? If we reply, what is the current position we can state?</div>
-<textarea id="billing_threads" name="billing_threads"></textarea>
 </div>
 <div class="field">
 <label class="q" for="nos">The no's</label>
@@ -407,7 +381,7 @@
 </div>
 <div class="field">
 <label class="q" for="website_limits">Is any part of the site off limits?</label>
-<div class="hint">Pages that need legal or leadership sign-off, such as pricing and terms, and any release freeze we should plan around.</div>
+<div class="hint">Pages that need legal or leadership sign-off, and any release freeze we should plan around.</div>
 <textarea id="website_limits" name="website_limits"></textarea>
 </div></div></section>
 <section><div class="sec-head"><div class="sec-num">7</div><h2>YouTube</h2></div><div class="sec-body"><div class="field">
@@ -423,6 +397,12 @@
 </table></div>
 <div class="confirm">We can break this down by prompt, channel and video format. <strong>Yes or no</strong>, and who on your side would use it.</div>
 <textarea id="youtube_data" name="youtube_data"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">8</div><h2>Working together</h2></div><div class="sec-body"><div class="field"><div class="q">How we will share the work</div><div class="known"><span class="tag">How we work</span><p>We will share threads with you every two weeks, starting in early December.</p></div></div>
+<div class="field">
+<label class="q" for="standup_time">When should we hold our standup?</label>
+<div class="confirm"><strong>Thursday</strong> works best on our side. Which time on Thursday suits you, and in which time zone?</div>
+<textarea id="standup_time" name="standup_time"></textarea>
 </div></div></section>
 <section>
   <div class="sec-head"><div class="sec-num alt">&#8679;</div><h2>Attachments</h2></div>
