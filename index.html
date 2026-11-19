@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Higgsfield Questionnaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* redditsetgo editorial identity — tokens lifted from gamma-reddit-ops/app/globals.css.
+     Warm off-white canvas, white surfaces, dark green ink, selective orange.
+     Display face is PP Eiko where licensed, Georgia otherwise. */
+  :root {
+    --cream: #f7f6f4;
+    --paper: #ffffff;
+    --surface-muted: #f3f3f3;
+    --ink: #14201e;
+    --slateink: #212631;
+    --muted: #5f6763;
+    --line: #dddfda;
+
+    --green: #15502e;
+    --green-hover: #0f3e23;
+    --green-soft: #dcebe1;
+
+    --accent: #ff6106;
+    --accent-hover: #e85700;
+    --accent-soft: #fee3da;
+    --accent-ink: #b94400;
+
+    --deep: #012b24;
+    --deep-line: #12433a;
+    --deep-text: #cfdad4;
+    --deep-muted: #8fa39a;
+
+    --radius: 0.75rem;
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    --font-serif: "PP Eiko", Georgia, "Times New Roman", serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, label:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .font-display { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--deep);
+    border-bottom: 1px solid var(--deep-line);
+    color: var(--paper);
+    padding: 64px 20px 76px;
+  }
+  .hero-inner { max-width: 820px; margin: 0 auto; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.14;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    font-size: 1.04rem;
+    color: var(--deep-text);
+    max-width: 620px;
+  }
+  .hero .pills { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero .pill {
+    font-size: 0.8rem;
+    color: var(--deep-text);
+    border: 1px solid var(--deep-line);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap { max-width: 820px; margin: -40px auto 0; padding: 0 20px 90px; }
+
+  section {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px 34px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px -4px rgba(25, 28, 35, 0.10);
+  }
+  @media (max-width: 560px) { section { padding: 24px 20px; } }
+
+  .sec-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 6px; }
+  .sec-num {
+    flex: 0 0 auto;
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    background: var(--green);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    margin-top: 5px;
+  }
+  .sec-num.alt { background: var(--green-soft); color: var(--green); }
+  section h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.25;
+    padding-top: 2px;
+  }
+  .section-note { color: var(--muted); font-size: 0.93rem; margin: 6px 0 8px 44px; }
+  .sec-body { margin-top: 20px; }
+
+  h3 {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    margin: 32px 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h3::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .field { margin-bottom: 26px; }
+  .field:last-child { margin-bottom: 4px; }
+  label.q {
+    display: block;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    margin-bottom: 6px;
+  }
+  .hint { color: var(--muted); font-size: 0.88rem; margin-bottom: 10px; }
+  .hint ul { margin: 8px 0 0 18px; }
+  .hint li { margin-bottom: 4px; }
+  .hint .quoted { color: var(--green); font-weight: 500; }
+
+  textarea, input[type="text"], input[type="email"] {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 11px 13px;
+    font-family: inherit;
+    font-size: 0.94rem;
+    color: var(--ink);
+    background: var(--paper);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  textarea { min-height: 100px; resize: vertical; }
+  textarea::placeholder, input::placeholder { color: #9aa29d; }
+  textarea:focus, input:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(21, 80, 46, 0.15);
+  }
+
+  .row { display: flex; gap: 18px; flex-wrap: wrap; }
+  .row .field { flex: 1 1 210px; }
+
+  .optional-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-soft);
+    border: 1px solid #c5dccd;
+    color: var(--green);
+    font-size: 0.87rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 9px 14px;
+    margin-bottom: 22px;
+  }
+
+  /* ---------- File upload ---------- */
+  .dropzone {
+    display: block;
+    border: 1px dashed #c8cdc7;
+    border-radius: 0.5rem;
+    background: var(--surface-muted);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--accent); background: var(--accent-soft); }
+  .dropzone .dz-icon {
+    width: 38px; height: 38px;
+    margin: 0 auto 10px;
+    border-radius: 10px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    color: var(--green);
+  }
+  .dropzone strong { color: var(--ink); font-weight: 600; }
+  .dropzone .dz-sub { color: var(--muted); font-size: 0.84rem; margin-top: 4px; }
+  .dropzone input[type="file"] { display: none; }
+  .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .file-list .chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 7px 12px;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+  .file-list .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: 0 0 auto; }
+
+
+  /* ---------- Recap panels ---------- */
+  .known {
+    background: var(--green-soft);
+    border: 1px solid #c5dccd;
+    border-radius: 0.5rem;
+    padding: 14px 16px 15px;
+    margin-bottom: 10px;
+    font-size: 0.89rem;
+    color: #1c3828;
+  }
+  .known .tag {
+    display: inline-block;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--paper);
+    border: 1px solid #c5dccd;
+    border-radius: 999px;
+    padding: 3px 9px;
+    margin-bottom: 10px;
+  }
+  .known ul { margin: 8px 0 0 18px; }
+  .known li { margin-bottom: 4px; }
+  .known p + p { margin-top: 8px; }
+  .known table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.86rem; }
+  .known td { padding: 5px 10px 5px 0; vertical-align: top; border-bottom: 1px solid #c5dccd; }
+  .known td:first-child { font-weight: 600; white-space: nowrap; width: 34%; }
+  .known tr:last-child td { border-bottom: none; }
+
+  .known.ours { background: var(--accent-soft); border-color: #f3c8b6; color: #5c2e15; }
+  .known.ours .tag { color: var(--accent-ink); border-color: #f3c8b6; }
+  .known.ours td { border-bottom-color: #f3c8b6; }
+
+  .confirm {
+    font-size: 0.86rem;
+    color: var(--accent-ink);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .confirm strong { font-weight: 600; }
+
+  /* ---------- Submit ---------- */
+  .submit-block { text-align: center; padding-top: 6px; }
+  button[type="submit"] {
+    background: var(--accent);
+    color: var(--ink);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 14px 42px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 8px -4px rgba(25, 28, 35, 0.10);
+    transition: background 0.15s;
+  }
+  button[type="submit"]:hover { background: var(--accent-hover); }
+  .submit-note { color: var(--muted); font-size: 0.86rem; margin-top: 14px; }
+
+  /* ---------- Higgsfield additions: wider canvas and data tables ---------- */
+  .hero-inner { max-width: 1040px; }
+  .wrap { max-width: 1040px; }
+  .known table.data { font-size: 0.82rem; margin-top: 10px; background: var(--paper); border-radius: 0.4rem; overflow: hidden; }
+  .known table.data th {
+    text-align: right; font-weight: 600; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 8px 8px; color: var(--accent-ink); border-bottom: 1px solid #f3c8b6; white-space: nowrap; background: var(--paper);
+  }
+  .known table.data th:first-child { text-align: left; }
+  .known table.data td { padding: 7px 8px; border-bottom: 1px solid #f6ddd1; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .known table.data td:first-child { text-align: left; white-space: normal; font-weight: 500; width: auto; color: var(--ink); }
+  .known table.data tr:last-child td { border-bottom: none; }
+  .known table.data td.hi { background: var(--green-soft); color: var(--green); font-weight: 600; }
+  .known table.data td.lo { background: var(--accent-soft); color: var(--accent-ink); }
+  .known table.data td.own { font-weight: 600; color: var(--ink); border-right: 1px solid #f3c8b6; }
+  .known table.data th.own { border-right: 1px solid #f3c8b6; }
+  .known table.data tr.topic td {
+    background: var(--deep); color: var(--paper); font-weight: 500; text-align: left; letter-spacing: 0.01em; padding: 9px 10px; white-space: normal;
+  }
+  .known table.data tr.topic td span { color: var(--deep-muted); font-weight: 400; margin-left: 8px; }
+  .known table.data.prompts td:first-child { width: 40%; min-width: 220px; }
+  .known table.data.prompts td, .known table.data.prompts th { width: 8.5%; }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.8rem; margin-top: 10px; color: #5c2e15; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1px solid #f3c8b6; }
+  .legend i.hi { background: var(--green-soft); border-color: #c5dccd; }
+  .legend i.lo { background: var(--accent-soft); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chips span { background: var(--paper); border: 1px solid #f3c8b6; border-radius: 999px; padding: 4px 11px; font-size: 0.84rem; font-weight: 500; color: var(--ink); }
+  .foot { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 34px; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Onboarding &middot; Reddit + AI visibility &middot; November 2026</span>
+    <h1>Higgsfield Questionnaire</h1>
+    <p>We went through your Profound workspace and the pages the engines cite on your 76 target prompts. This form plays the findings back and asks what we need to start the Reddit work.</p>
+    <div class="pills">
+      <span class="pill">~15 minutes</span>
+      <span class="pill">Every question optional</span>
+      <span class="pill">Short answers are fine</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<form action="https://formbold.com/s/3O7Ee" method="POST" enctype="multipart/form-data">
+<section>
+  <div class="sec-head"><div class="sec-num alt">&#9998;</div><h2>About you</h2></div>
+  <p class="section-note">So we know who filled this in and where to follow up.</p>
+  <div class="sec-body">
+    <div class="row">
+      <div class="field"><label class="q" for="name">Name</label><input type="text" id="name" name="name"></div>
+      <div class="field"><label class="q" for="email">Email</label><input type="email" id="email" name="email"></div>
+    </div>
+    <div class="field"><label class="q" for="role">Role</label><input type="text" id="role" name="role"></div>
+  </div>
+</section>
+<section>
+  <div class="sec-head"><div class="sec-num alt">&#9432;</div><h2>How to read this form</h2></div>
+  <div class="sec-body">
+    <div class="known ours">
+      <span class="tag">Our research</span>
+      <p>Orange blocks are what we found in your Profound workspace and on the pages the engines cite. Read each one, then answer the question under it. Short answers are fine.</p>
+    </div>
+    <p class="hint" style="margin-top:14px;">Every figure covers your 76 target prompts over one week of runs in November 2026, United States, unless the block says otherwise. Nothing here is mandatory.</p>
+  </div>
+</section>
+<section><div class="sec-head"><div class="sec-num">1</div><h2>Your 76 target prompts</h2></div><p class="section-note">Enterprise &amp; B2B and Ads / content at scale first, then the other four Revenue topics.</p><div class="sec-body"><div class="field">
+<label class="q" for="target_prompts">Where Higgsfield shows up today, prompt by prompt</label>
+<div class="known ours"><span class="tag">Our research &middot; from your Profound workspace</span><p>How often each engine named Higgsfield when it answered the prompt, across one week of runs in November 2026. The first number column is all engines together.</p><div class="scroll"><table class="data prompts">
+<tr><th>Prompt</th><th class="own">All engines</th><th>ChatGPT</th><th>Gemini</th><th>AI Mode</th><th>AI Overviews</th><th>Claude</th><th>Perplexity</th></tr>
+<tr class="topic"><td colspan="8">Enterprise &amp; B2B<span>21 prompts &middot; top priority &middot; average 30%</span></td></tr>
+<tr><td>Which AI video generation platforms offer team roles and permissions?</td><td class="own hi">79%</td><td class="">29%</td><td class="hi">71%</td><td class="hi">86%</td><td class="hi">86%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Best AI video tools for game trailers and UA creatives</td><td class="own hi">68%</td><td class="hi">86%</td><td class="">14%</td><td class="hi">100%</td><td class="hi">57%</td><td class="hi">100%</td><td class="hi">50%</td></tr>
+<tr><td>Best AI UGC video tools for marketing agencies</td><td class="own hi">66%</td><td class="hi">71%</td><td class="">14%</td><td class="hi">86%</td><td class="">43%</td><td class="hi">100%</td><td class="hi">83%</td></tr>
+<tr><td>What is the best AI tool for video ads?</td><td class="own hi">51%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">100%</td><td class="hi">100%</td><td class="hi">71%</td><td class="">33%</td></tr>
+<tr><td>How do game studios make trailers and ad creatives with AI?</td><td class="own">40%</td><td class="">29%</td><td class="lo">0%</td><td class="hi">100%</td><td class="hi">86%</td><td class="">29%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI video production platform</td><td class="own">38%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">100%</td><td class="">43%</td><td class="hi">71%</td><td class="">17%</td></tr>
+<tr><td>Which AI video platforms offer custom pricing and contracts for agencies?</td><td class="own">36%</td><td class="">43%</td><td class="">29%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">43%</td><td class="hi">100%</td></tr>
+<tr><td>How do studios scale AI video production for clients?</td><td class="own">31%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">57%</td><td class="">43%</td><td class="hi">57%</td><td class="">n/a</td></tr>
+<tr><td>Best tools to automate video ad production for a marketing team</td><td class="own">31%</td><td class="">14%</td><td class="">14%</td><td class="">29%</td><td class="">14%</td><td class="hi">100%</td><td class="">17%</td></tr>
+<tr><td>How can a small business make video ads with AI?</td><td class="own">29%</td><td class="lo">0%</td><td class="">43%</td><td class="hi">86%</td><td class="">14%</td><td class="lo">0%</td><td class="">n/a</td></tr>
+<tr><td>Best AI video platform for in-house creative teams</td><td class="own">27%</td><td class="">29%</td><td class="">29%</td><td class="">43%</td><td class="lo">0%</td><td class="">43%</td><td class="">17%</td></tr>
+<tr><td>Best AI product video generator for ecommerce</td><td class="own">21%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">57%</td><td class="lo">0%</td><td class="hi">71%</td><td class="lo">0%</td></tr>
+<tr><td>Which AI video platforms offer brand controls and approval workflows?</td><td class="own">21%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">29%</td><td class="">14%</td><td class="">14%</td><td class="hi">67%</td></tr>
+<tr><td>How do ecommerce brands make product video ads with AI?</td><td class="own">20%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">43%</td><td class="">29%</td><td class="">29%</td><td class="">n/a</td></tr>
+<tr><td>How do I make marketing videos with AI for my brand?</td><td class="own">17%</td><td class="lo">0%</td><td class="">14%</td><td class="hi">71%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td></tr>
+<tr><td>What AI video tools do enterprise teams actually use?</td><td class="own">12%</td><td class="">29%</td><td class="">29%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI video tool for brand marketing videos</td><td class="own lo">10%</td><td class="lo">0%</td><td class="">14%</td><td class="">14%</td><td class="">29%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Best enterprise AI video platform</td><td class="own lo">7%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="">29%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI video ad maker for a small business</td><td class="own lo">7%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">43%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Which AI video generation platforms meet enterprise security and compliance requirements?</td><td class="own lo">5%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">29%</td><td class="lo">0%</td></tr>
+<tr><td>Which AI video platforms offer dedicated support and onboarding for teams?</td><td class="own lo">5%</td><td class="lo">0%</td><td class="">14%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr class="topic"><td colspan="8">Revenue: Ads / content at scale<span>9 prompts &middot; top priority &middot; average 22%</span></td></tr>
+<tr><td>How can I automate video ad creation with Claude?</td><td class="own">49%</td><td class="lo">0%</td><td class="">29%</td><td class="hi">100%</td><td class="hi">86%</td><td class="lo">0%</td><td class="hi">80%</td></tr>
+<tr><td>What&#x27;s the best AI avatar tool for performance ads and commercials?</td><td class="own">34%</td><td class="lo">0%</td><td class="">29%</td><td class="hi">86%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">17%</td></tr>
+<tr><td>How can I animate product photos with AI without changing the packaging or labels?</td><td class="own">29%</td><td class="lo">0%</td><td class="">14%</td><td class="">43%</td><td class="hi">86%</td><td class="lo">0%</td><td class="">n/a</td></tr>
+<tr><td>Best AI platforms for generating images and videos at scale</td><td class="own">25%</td><td class="lo">0%</td><td class="">14%</td><td class="">43%</td><td class="lo">0%</td><td class="hi">57%</td><td class="">33%</td></tr>
+<tr><td>What&#x27;s the best AI tool for creating variations of a video ad?</td><td class="own">21%</td><td class="">43%</td><td class="">14%</td><td class="lo">0%</td><td class="">29%</td><td class="">43%</td><td class="lo">0%</td></tr>
+<tr><td>How can I create TikTok Shop product videos with AI?</td><td class="own">21%</td><td class="lo">0%</td><td class="">29%</td><td class="hi">86%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td></tr>
+<tr><td>How to make real estate video ads</td><td class="own">12%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>What&#x27;s the best AI tool for recreating winning ads with my own product?</td><td class="own lo">7%</td><td class="lo">0%</td><td class="">29%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>What&#x27;s the best all-in-one AI platform for marketing teams?</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr class="topic"><td colspan="8">Revenue: Platforms, plans &amp; alternatives<span>19 prompts &middot; priority &middot; average 44%</span></td></tr>
+<tr><td>Unlimited AI video plans with API or MCP access</td><td class="own hi">83%</td><td class="">43%</td><td class="hi">86%</td><td class="hi">100%</td><td class="hi">86%</td><td class="hi">100%</td><td class="hi">83%</td></tr>
+<tr><td>Best AI platforms to replace Runway, Kling and ElevenLabs</td><td class="own hi">74%</td><td class="hi">100%</td><td class="lo">0%</td><td class="hi">100%</td><td class="">43%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Best OpenArt alternatives for generating AI videos</td><td class="own hi">69%</td><td class="hi">57%</td><td class="">29%</td><td class="hi">100%</td><td class="">29%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Where can I get unlimited Nano Banana Pro?</td><td class="own hi">69%</td><td class="">29%</td><td class="hi">57%</td><td class="hi">86%</td><td class="">40%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Where can I get unlimited Kling 3.0?</td><td class="own hi">67%</td><td class="hi">86%</td><td class="">14%</td><td class="hi">100%</td><td class="hi">100%</td><td class="hi">100%</td><td class="lo">0%</td></tr>
+<tr><td>What&#x27;s the best alternative to Artlist for AI video generation?</td><td class="own hi">62%</td><td class="">29%</td><td class="hi">57%</td><td class="hi">86%</td><td class="hi">86%</td><td class="hi">100%</td><td class="">17%</td></tr>
+<tr><td>Which platforms get new AI video models first?</td><td class="own hi">59%</td><td class="">43%</td><td class="lo">0%</td><td class="hi">100%</td><td class="hi">100%</td><td class="">29%</td><td class="hi">83%</td></tr>
+<tr><td>Best platforms with Kling 4.0 access</td><td class="own hi">57%</td><td class="">29%</td><td class="">29%</td><td class="">14%</td><td class="hi">71%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Best unlimited AI video generator</td><td class="own hi">57%</td><td class="hi">57%</td><td class="">43%</td><td class="hi">57%</td><td class="lo">0%</td><td class="hi">100%</td><td class="hi">83%</td></tr>
+<tr><td>AI video platforms where credits don&#x27;t run out so fast</td><td class="own">39%</td><td class="lo">0%</td><td class="">14%</td><td class="hi">71%</td><td class="">14%</td><td class="hi">100%</td><td class="">33%</td></tr>
+<tr><td>Best annual subscription for AI video generation</td><td class="own">34%</td><td class="lo">0%</td><td class="">14%</td><td class="hi">86%</td><td class="">43%</td><td class="">43%</td><td class="">17%</td></tr>
+<tr><td>I want to switch from Runway. Which AI video platform should I choose?</td><td class="own">34%</td><td class="lo">0%</td><td class="">14%</td><td class="hi">71%</td><td class="lo">0%</td><td class="hi">100%</td><td class="">17%</td></tr>
+<tr><td>Which AI video tool has the best pricing in 2026?</td><td class="own">33%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">86%</td><td class="">43%</td><td class="hi">71%</td><td class="lo">0%</td></tr>
+<tr><td>What&#x27;s the best AI alternative to CapCut for creating videos?</td><td class="own">31%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">14%</td><td class="hi">100%</td><td class="lo">0%</td></tr>
+<tr><td>Which AI video generators allow commercial use?</td><td class="own">25%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">57%</td><td class="">14%</td><td class="">14%</td><td class="hi">67%</td></tr>
+<tr><td>Best Adobe Firefly alternatives for AI video generation</td><td class="own">19%</td><td class="">14%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">17%</td></tr>
+<tr><td>What&#x27;s the best alternative to Google Veo?</td><td class="own">12%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">57%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td></tr>
+<tr><td>What can I use instead of HeyGen to create AI avatar videos?</td><td class="own lo">5%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">29%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Canva alternative for AI image generation</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr class="topic"><td colspan="8">Revenue: Agency &amp; client production<span>10 prompts &middot; priority &middot; average 25%</span></td></tr>
+<tr><td>Which AI video platforms let agencies manage client projects separately?</td><td class="own hi">60%</td><td class="hi">71%</td><td class="hi">57%</td><td class="">29%</td><td class="lo">0%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Best AI video ad platform for agencies</td><td class="own hi">54%</td><td class="">43%</td><td class="">29%</td><td class="hi">100%</td><td class="hi">57%</td><td class="">14%</td><td class="hi">83%</td></tr>
+<tr><td>Best AI tools for motion graphics</td><td class="own">48%</td><td class="lo">0%</td><td class="hi">71%</td><td class="hi">100%</td><td class="hi">100%</td><td class="lo">0%</td><td class="">17%</td></tr>
+<tr><td>How can I replace an object in a video with AI without changing the rest?</td><td class="own">40%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">29%</td><td class="hi">100%</td><td class="">n/a</td></tr>
+<tr><td>How can social media agencies use AI in their video production workflow?</td><td class="own">23%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">43%</td><td class="lo">0%</td><td class="">n/a</td></tr>
+<tr><td>Can AI tools help with professional video editing, and which ones are best?</td><td class="own">12%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="lo">0%</td></tr>
+<tr><td>How can I upscale a video with AI?</td><td class="own lo">10%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td><td class="">29%</td><td class="">14%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI explainer video maker</td><td class="own lo">2%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI video translator for ads</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI music video generator</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr class="topic"><td colspan="8">Revenue: Character consistency<span>10 prompts &middot; priority &middot; average 25%</span></td></tr>
+<tr><td>Which AI tools keep a brand mascot consistent across images and videos?</td><td class="own hi">60%</td><td class="">29%</td><td class="">14%</td><td class="hi">57%</td><td class="hi">57%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Best AI tool for creating micro-dramas</td><td class="own hi">56%</td><td class="hi">57%</td><td class="">29%</td><td class="hi">71%</td><td class="">14%</td><td class="hi">100%</td><td class="hi">67%</td></tr>
+<tr><td>How can I put myself in AI-generated videos, and which tools work best?</td><td class="own">48%</td><td class="">29%</td><td class="">29%</td><td class="hi">86%</td><td class="">14%</td><td class="">29%</td><td class="hi">100%</td></tr>
+<tr><td>Best AI video generator for short films</td><td class="own">34%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="lo">0%</td><td class="hi">100%</td><td class="">33%</td></tr>
+<tr><td>Which AI video tools keep multiple characters consistent in the same scene?</td><td class="own">29%</td><td class="">14%</td><td class="">43%</td><td class="">14%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">33%</td></tr>
+<tr><td>How do I start a faceless YouTube channel with AI?</td><td class="own">17%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">71%</td><td class="">14%</td><td class="lo">0%</td><td class="">n/a</td></tr>
+<tr><td>How do I create a talking AI avatar?</td><td class="own lo">3%</td><td class="lo">0%</td><td class="">17%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Best AI tool for creating animations and cartoons</td><td class="own lo">2%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>How can I turn a manga or webtoon into an anime using AI?</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>How can I create an animated video with AI?</td><td class="own lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr class="topic"><td colspan="8">Revenue: Automated production / MCP<span>7 prompts &middot; priority &middot; average 33%</span></td></tr>
+<tr><td>Which AI video APIs don&#x27;t charge for failed generations?</td><td class="own hi">74%</td><td class="">29%</td><td class="">43%</td><td class="hi">100%</td><td class="hi">71%</td><td class="hi">100%</td><td class="hi">100%</td></tr>
+<tr><td>Which AI video generators can I use directly in ChatGPT?</td><td class="own hi">62%</td><td class="hi">86%</td><td class="">14%</td><td class="hi">100%</td><td class="hi">86%</td><td class="lo">0%</td><td class="hi">83%</td></tr>
+<tr><td>How can I generate AI videos from the terminal?</td><td class="own hi">52%</td><td class="lo">0%</td><td class="lo">0%</td><td class="hi">100%</td><td class="">29%</td><td class="hi">86%</td><td class="hi">100%</td></tr>
+<tr><td>Which API lets me use multiple AI video models?</td><td class="own">19%</td><td class="">43%</td><td class="lo">0%</td><td class="hi">71%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+<tr><td>Which AI video generators work with n8n or Make?</td><td class="own">14%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="hi">57%</td><td class="lo">0%</td></tr>
+<tr><td>How can I generate AI videos and images with Cursor or Codex?</td><td class="own lo">5%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">29%</td><td class="lo">0%</td></tr>
+<tr><td>How can I generate AI videos using an API?</td><td class="own lo">2%</td><td class="lo">0%</td><td class="lo">0%</td><td class="">14%</td><td class="lo">0%</td><td class="lo">0%</td><td class="lo">0%</td></tr>
+</table></div><div class="legend"><span><i class="hi"></i>Named in half or more of the answers</span><span><i class="lo"></i>Named in under 10%</span></div><p style="margin-top:12px;">Across the 76, Higgsfield is named in 31% of answers. Google AI Mode is the strongest engine at 52% and Claude follows at 45%. ChatGPT sits at 17% and Gemini at 15%, and on 31 of the 76 prompts both of them leave Higgsfield out.</p></div>
+<div class="confirm">Is this the final set? Tell us <strong>which prompts matter most to revenue</strong> and any you would drop or replace.</div>
+<div class="hint">A few sit inside Revenue topics but ask for something else, such as music videos, video translation, explainer videos and manga to anime. Say whether those are products you want to win on.</div>
+<textarea id="target_prompts" name="target_prompts"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">2</div><h2>Where the answers come from</h2></div><p class="section-note">The pages each engine cites when it answers your 76 prompts.</p><div class="sec-body"><div class="field">
+<label class="q" for="citation_reaction">The citation picture</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span><p>About 20,300 citations in the week.</p>
+<table class="data">
+<tr><th>Source type</th><th>Share of citations on the 76 prompts</th></tr>
+<tr><td>Vendor and tool sites (Zapier, Adobe, Runway, Arcads and others)</td><td>57.3%</td></tr>
+<tr><td>YouTube</td><td>12.1%</td></tr>
+<tr><td>Competitor sites (HeyGen, Synthesia, Creatify)</td><td>9.6%</td></tr>
+<tr><td>Earned media (Creative Bloq, CNET, PCMag and others)</td><td>9.2%</td></tr>
+<tr><td>higgsfield.ai</td><td>4.9%</td></tr>
+<tr><td>Reddit</td><td>2.9%</td></tr>
+<tr><td>Wikipedia and other institutions</td><td>0.5%</td></tr>
+</table><p style="margin-top:14px;">The mix changes a lot by engine. YouTube and Reddit are cited by Google's surfaces and almost nowhere else.</p>
+<div class="scroll"><table class="data">
+<tr><th>Engine</th><th>Vendor and tool sites</th><th>YouTube</th><th>Reddit</th><th>Competitor sites</th><th>Earned media</th><th>higgsfield.ai</th></tr>
+<tr><td>ChatGPT</td><td>61.5%</td><td>0%</td><td>0%</td><td>18.5%</td><td>14.2%</td><td>3.0%</td></tr>
+<tr><td>Gemini</td><td>69.1%</td><td>0.5%</td><td>3.9%</td><td>13.5%</td><td>4.1%</td><td>7.6%</td></tr>
+<tr><td>Google AI Mode</td><td>43.5%</td><td>30.9%</td><td>7.6%</td><td>5.9%</td><td>4.6%</td><td>1.8%</td></tr>
+<tr><td>Google AI Overviews</td><td>36.9%</td><td>40.6%</td><td>5.9%</td><td>6.0%</td><td>3.1%</td><td>1.2%</td></tr>
+<tr><td>Claude</td><td>70.4%</td><td>0%</td><td>0%</td><td>4.2%</td><td>16.1%</td><td>4.3%</td></tr>
+<tr><td>Perplexity</td><td>62.3%</td><td>0.8%</td><td>0%</td><td>9.7%</td><td>13.1%</td><td>11.3%</td></tr>
+</table></div></div>
+<div class="confirm">Does this match what your team sees in Profound, and is there one engine you care about most?</div>
+<textarea id="citation_reaction" name="citation_reaction"></textarea>
+</div>
+<div class="field">
+<label class="q" for="post_comment_split">Posts versus comments: what split do you want?</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span><p>Reddit is 677 of those citations. We pulled the title, post and comments of the cited threads to see what earns a citation and what gets a brand named in the answer.</p>
+<table class="data">
+<tr><th>What we measured on the 147 cited threads</th><th>Result</th></tr>
+<tr><td>Engines that cite Reddit on your prompts</td><td>Google AI Mode 58%, AI Overviews 34%, Gemini 8%</td></tr>
+<tr><td>Age of a cited thread</td><td>Half of citations go to threads under 188 days old</td></tr>
+<tr><td>Thread title closely matches the prompt</td><td>7.0 citations, against 2.3 with no match</td></tr>
+<tr><td>Title contains "best"</td><td>5.9 citations, against 3.7 without</td></tr>
+<tr><td>Brands named per thread</td><td>0.3 in the title, 2.1 in the post, 6.9 in the comments</td></tr>
+<tr><td>Upvotes</td><td>No link to citations. The typical cited thread has a score of 2.</td></tr>
+<tr><td>Threads that name Higgsfield</td><td>45 of 147, nearly always in the comments</td></tr>
+</table><p style="margin-top:14px;">The title decides whether a thread is cited. The comments decide which brands the answer names.</p>
+<table class="data">
+<tr><th>Where a brand is named in the cited thread</th><th>How often Google's engines then name it on that prompt</th></tr>
+<tr><td>In the title</td><td>66%</td></tr>
+<tr><td>In the post</td><td>35%</td></tr>
+<tr><td>In three or more comments</td><td>36%</td></tr>
+<tr><td>In one or two comments</td><td>22%</td></tr>
+<tr><td>Not in the thread</td><td>9%</td></tr>
+</table></div>
+<div class="confirm">Give us a split between <strong>new posts</strong> and <strong>comments on existing threads</strong>, for example 30/70.</div>
+<div class="hint">New posts let us set the title to the prompt. Comments put Higgsfield into threads that are already cited, and three mentions in a thread do as much as a mention in the post.</div>
+<textarea id="post_comment_split" name="post_comment_split"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">3</div><h2>Subreddits</h2></div><div class="sec-body"><div class="field">
+<label class="q" for="subreddits_engage">Where should we engage?</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span>
+<table class="data">
+<tr><th>Subreddit</th><th>Share of Reddit citations on your prompts</th></tr>
+<tr><td>r/generativeAI</td><td>34.9%</td></tr>
+<tr><td>r/DigitalMarketing</td><td>7.2%</td></tr>
+<tr><td>r/AI_Agents</td><td>3.8%</td></tr>
+<tr><td>r/AI_UGC_Marketing</td><td>3.8%</td></tr>
+<tr><td>r/AskMarketing</td><td>3.4%</td></tr>
+<tr><td>r/StableDiffusion</td><td>3.0%</td></tr>
+<tr><td>r/aigamedev</td><td>3.0%</td></tr>
+<tr><td>r/content_marketing</td><td>2.4%</td></tr>
+<tr><td>r/ClaudeWorkflows</td><td>2.1%</td></tr>
+<tr><td>r/n8n</td><td>2.0%</td></tr>
+</table>
+<p style="margin-top:12px;">71 subreddits were cited in all. On the Enterprise and Ads prompts the marketing subreddits lead, with r/DigitalMarketing at 17% and r/AI_UGC_Marketing at 13%.</p></div><div class="known ours"><span class="tag">Our starting list &middot; react to this</span>
+<p>The subreddits we plan to start with:</p>
+<div class="chips"><span>r/generativeAI</span><span>r/DigitalMarketing</span><span>r/AI_UGC_Marketing</span><span>r/AskMarketing</span><span>r/content_marketing</span><span>r/aigamedev</span><span>r/aifilmmaking</span><span>r/AI_Agents</span></div></div>
+<div class="confirm">Add or remove from the starting list, and name <strong>any subreddit we should stay out of</strong>.</div>
+<textarea id="subreddits_engage" name="subreddits_engage"></textarea>
+</div>
+<div class="field">
+<label class="q" for="reddit_presence">Your Reddit presence today</label>
+<div class="hint">Official accounts, a subreddit you run, staff who post, ambassadors or other agencies posting for you. Also any bans, removals or moderator warnings, so we know what we are walking into.</div>
+<textarea id="reddit_presence" name="reddit_presence"></textarea>
+</div>
+<div class="field">
+<label class="q" for="reddit_native">Should we do Reddit-native content?</label>
+<div class="hint">Posts written for the subreddit itself, such as tool tests, workflows and comparisons, with no link and no sales language. If yes, tell us which formats you are comfortable with and whether you can give us generations, prompts or test credits to make them.</div>
+<textarea id="reddit_native" name="reddit_native"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">4</div><h2>Keyword volume behind your prompts</h2></div><div class="sec-body"><div class="field">
+<label class="q" for="keyword_priority">How many people ask AI assistants about each theme</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span><p>Your 76 prompts are full questions, so we took the keyword inside each one. Profound prompt volume across ChatGPT, Gemini and Perplexity, October 2026. A keyword counts every prompt that contains all of its words.</p><div class="scroll"><table class="data">
+<tr><th>Keyword, from your prompts</th><th>Worldwide per month</th><th>United States</th><th>Largest markets</th></tr>
+<tr class="topic"><td colspan="4">Enterprise &amp; B2B</td></tr>
+<tr><td>ai product video</td><td>10.97M</td><td>2.37M</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>ai marketing video</td><td>7.37M</td><td>1.58M</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>enterprise ai video</td><td>2.25M</td><td>647K</td><td>United States, India, United Kingdom</td></tr>
+<tr><td>ai video agency</td><td>2.22M</td><td>454K</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>ai ugc video</td><td>1.91M</td><td>295K</td><td>India, United States, France</td></tr>
+<tr><td>small business video ads</td><td>701K</td><td>159K</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>ecommerce video ads ai</td><td>179K</td><td>46K</td><td>India, United States, Philippines</td></tr>
+<tr><td>game trailer ai</td><td>70K</td><td>31K</td><td>United States, India, South Korea</td></tr>
+<tr class="topic"><td colspan="4">Ads / content at scale</td></tr>
+<tr><td>ai video ads</td><td>4.81M</td><td>794K</td><td>India, United States, Vietnam</td></tr>
+<tr><td>video ad variations</td><td>579K</td><td>115K</td><td>India, United States, Philippines</td></tr>
+<tr><td>tiktok shop video ai</td><td>408K</td><td>103K</td><td>Vietnam, United States, India</td></tr>
+<tr><td>ai avatar ads</td><td>401K</td><td>86K</td><td>India, United States, France</td></tr>
+<tr><td>real estate video ads</td><td>260K</td><td>75K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>animate product photo</td><td>72K</td><td>11K</td><td>India, United States, Canada</td></tr>
+<tr class="topic"><td colspan="4">Platforms, plans &amp; alternatives</td></tr>
+<tr><td>ai video pricing</td><td>2.52M</td><td>605K</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>ai video commercial use</td><td>2.32M</td><td>366K</td><td>India, United States, United Kingdom</td></tr>
+<tr><td>nano banana pro</td><td>1.71M</td><td>203K</td><td>India, Brazil, United States</td></tr>
+<tr><td>unlimited ai video</td><td>804K</td><td>158K</td><td>India, Vietnam, United States</td></tr>
+<tr><td>veo alternative</td><td>53K</td><td>below reporting floor</td><td>India, Italy, Morocco</td></tr>
+<tr><td>runway alternative</td><td>51K</td><td>21K</td><td>United States, India, United Kingdom</td></tr>
+<tr><td>capcut alternative</td><td>29K</td><td>4.5K</td><td>India, Pakistan, United States</td></tr>
+<tr><td>heygen alternative</td><td>below reporting floor</td><td>below reporting floor</td><td></td></tr>
+<tr><td>artlist alternative</td><td>below reporting floor</td><td>below reporting floor</td><td></td></tr>
+<tr class="topic"><td colspan="4">Agency &amp; client production</td></tr>
+<tr><td>ai video editing</td><td>5.56M</td><td>799K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>ai motion graphics</td><td>1.63M</td><td>210K</td><td>India, United States, Vietnam</td></tr>
+<tr><td>ai explainer video</td><td>468K</td><td>78K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>ai music video generator</td><td>372K</td><td>51K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>ai video translator</td><td>64K</td><td>27K</td><td>India, United States, Vietnam</td></tr>
+<tr><td>ai video upscaler</td><td>29K</td><td>6.6K</td><td>India, Hong Kong, United States</td></tr>
+<tr class="topic"><td colspan="4">Character consistency</td></tr>
+<tr><td>consistent character ai</td><td>2.67M</td><td>384K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>ai short film</td><td>1.59M</td><td>298K</td><td>India, United States, Spain</td></tr>
+<tr><td>faceless youtube channel</td><td>437K</td><td>67K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>ai animation generator</td><td>289K</td><td>42K</td><td>India, United States, Pakistan</td></tr>
+<tr><td>talking ai avatar</td><td>277K</td><td>80K</td><td>India, United States, Philippines</td></tr>
+<tr><td>ai micro drama</td><td>130K</td><td>51K</td><td>India, United States, Vietnam</td></tr>
+<tr class="topic"><td colspan="4">Automated production / MCP</td></tr>
+<tr><td>ai video api</td><td>3.44M</td><td>543K</td><td>India, United States, United Kingdom</td></tr>
+</table></div></div>
+<div class="confirm">Which of these themes should carry the most weight, and is there one you expected to see and did not?</div>
+<textarea id="keyword_priority" name="keyword_priority"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">5</div><h2>How we mention Higgsfield, and the no's</h2></div><div class="sec-body"><div class="field">
+<label class="q" for="naming">Naming</label>
+<div class="hint">"Higgsfield" or "Higgsfield AI"? Which product names can we use in a thread: Cinema Studio, Soul ID, Marketing Studio, Supercomputer, MCP? Any name we should avoid.</div>
+<textarea id="naming" name="naming"></textarea>
+</div>
+<div class="field">
+<label class="q" for="claims">What we can say</label>
+<div class="hint">The claims you are happy to see repeated in public, with the source for each. For example the number of models on one subscription, what the unlimited plan covers, and what happens to credits when a generation fails.</div>
+<textarea id="claims" name="claims"></textarea>
+</div>
+<div class="field">
+<label class="q" for="competitors">Competitors</label>
+<div class="hint">Can we name Runway, Kling, HeyGen, Synthesia or Creatify in a comparison? Can we name one first, or only reply once someone else has? Any competitor that is off limits.</div>
+<textarea id="competitors" name="competitors"></textarea>
+</div>
+<div class="field">
+<label class="q" for="billing_threads">Pricing and billing threads</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span>
+<p>How the engines talk about Higgsfield once it is named, on your 29 branded prompts:</p>
+<table class="data">
+<tr><th>Theme</th><th>Appears in</th><th>Positive</th></tr>
+<tr><td>Pricing and plans</td><td>44% of answers</td><td>12%</td></tr>
+<tr><td>Cinematic direction and camera control</td><td>24%</td><td>99%</td></tr>
+<tr><td>Marketing ads</td><td>9%</td><td>62%</td></tr>
+<tr><td>Enterprise controls</td><td>8%</td><td>29%</td></tr>
+</table></div>
+<div class="confirm">When a thread raises billing, refunds or the unlimited plan, should we <strong>reply, stay out, or point people to support</strong>? If we reply, what is the current position we can state?</div>
+<textarea id="billing_threads" name="billing_threads"></textarea>
+</div>
+<div class="field">
+<label class="q" for="nos">The no's</label>
+<div class="hint">Topics, claims, wording, subreddits or people we should never touch. Anything that has gone badly before.</div>
+<textarea id="nos" name="nos"></textarea>
+</div>
+<div class="field">
+<label class="q" for="links">Links</label>
+<div class="hint">Can we link to higgsfield.ai in a comment? If yes, which pages, and are there pages we should never send people to.</div>
+<textarea id="links" name="links"></textarea>
+</div>
+<div class="field">
+<label class="q" for="approvals">Approvals</label>
+<div class="hint">Who signs off posts and comments, how fast, and whether you want to see everything or only posts.</div>
+<textarea id="approvals" name="approvals"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">6</div><h2>Website</h2></div><div class="sec-body"><div class="field">
+<label class="q" for="website_timeline">How soon can website changes go live?</label>
+<div class="hint">A rough turnaround is enough for each of these: an edit to an existing page, a new blog post or landing page, and a change that needs engineering.</div>
+<textarea id="website_timeline" name="website_timeline"></textarea>
+</div>
+<div class="field">
+<label class="q" for="website_owner">Who owns the site</label>
+<div class="hint">The person we work with for higgsfield.ai, and whoever runs geo.higgsfield.ai if that is a different team or vendor.</div>
+<textarea id="website_owner" name="website_owner"></textarea>
+</div>
+<div class="field">
+<label class="q" for="website_limits">Is any part of the site off limits?</label>
+<div class="hint">Pages that need legal or leadership sign-off, such as pricing and terms, and any release freeze we should plan around.</div>
+<textarea id="website_limits" name="website_limits"></textarea>
+</div></div></section>
+<section><div class="sec-head"><div class="sec-num">7</div><h2>YouTube</h2></div><div class="sec-body"><div class="field">
+<label class="q" for="youtube_data">Do you need the YouTube data as well?</label>
+<div class="known ours"><span class="tag">Our research &middot; react to this</span>
+<table class="data">
+<tr><th>YouTube on your 76 prompts</th><th>Result</th></tr>
+<tr><td>Share of all citations</td><td>12.1%, about four times Reddit</td></tr>
+<tr><td>Share of Google AI Overviews citations</td><td>40.6%</td></tr>
+<tr><td>Share of Google AI Mode citations</td><td>30.9%</td></tr>
+<tr><td>Age of a cited video</td><td>Half of citations go to videos under 203 days old, and videos keep earning for two years</td></tr>
+<tr><td>Length</td><td>Three in four cited videos run 5 to 20 minutes</td></tr>
+</table></div>
+<div class="confirm">We can break this down by prompt, channel and video format. <strong>Yes or no</strong>, and who on your side would use it.</div>
+<textarea id="youtube_data" name="youtube_data"></textarea>
+</div></div></section>
+<section>
+  <div class="sec-head">
+    <div class="sec-num alt">&#8679;</div>
+    <h2>Attachments</h2>
+  </div>
+  <p class="section-note">Brand guidelines, approved claims, a list of official accounts, anything useful. <strong>Only 1 file can be attached</strong>, so if you have several, zip them together or ask your Claude/ChatGPT to combine them into one doc.</p>
+  <div class="sec-body">
+    <div class="field">
+      <label class="dropzone" for="attachments" id="dropzoneLabel">
+        <span class="dz-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </span>
+        <strong>Click to choose a file</strong> or drag it here
+        <div class="dz-sub">One file only. CSV, XLSX, PDF, doc, screenshot, or a zip with everything inside.</div>
+        <input type="file" id="attachments" name="attachments">
+      </label>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <div class="field">
+      <label class="q" for="anything_else">Anything else we should know?</label>
+      <div class="hint">Whatever did not fit the questions above.</div>
+      <textarea id="anything_else" name="anything_else"></textarea>
+    </div>
+  </div>
+</section>
+<div class="submit-block">
+  <button type="submit">Submit questionnaire</button>
+  <p class="submit-note">Partial answers are fine.</p>
+</div>
+</form>
+<p class="foot">RedditSetGo &middot; November 2026</p>
+</div>
+
+<script>
+  const input = document.getElementById('attachments');
+  const list = document.getElementById('fileList');
+  const zone = document.getElementById('dropzoneLabel');
+
+  function renderFiles(files) {
+    list.innerHTML = '';
+    Array.from(files).forEach(f => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      const kb = f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB';
+      chip.innerHTML = '<span class="dot"></span>' + f.name + ' <span style="color:#5f6763">(' + kb + ')</span>';
+      list.appendChild(chip);
+    });
+  }
+
+  input.addEventListener('change', () => renderFiles(input.files));
+  ['dragover', 'dragenter'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('drag'); }));
+  zone.addEventListener('drop', e => {
+    if (e.dataTransfer.files.length) {
+      const dt = new DataTransfer();
+      dt.items.add(e.dataTransfer.files[0]);
+      input.files = dt.files;
+      renderFiles(input.files);
+    }
+  });
+</script>
+</body>
+</html>
